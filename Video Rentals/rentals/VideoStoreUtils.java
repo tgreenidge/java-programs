@@ -1,18 +1,21 @@
 package rentals;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by charliesawyer on 9/15/16.
  */
 public class VideoStoreUtils {
     private static String firstNames[] = {
-        "Tom", "Dick", "Miles", "Harry", "Sol", "George", "David", "John", "Etc", "Viz", "Ibid", "Sid"
+            "Tom", "Dick", "Miles", "Harry", "Sol", "George", "David", "John", "Etc", "Viz", "Ibid", "Sid"
     };
     private static String lastNames[] = {
-      "Jones", "Smith", "Harrison", "Star", "Lennon", "McCartney", "Dylan", "Lincoln", "Alinsky",
+            "Jones", "Smith", "Harrison", "Star", "Lennon", "McCartney", "Dylan", "Lincoln", "Alinsky",
             "Davis"
     };
+
     public static void createAccounts(VideoStore store) {
         for (String firstName : firstNames) {
             for (String lastName : lastNames) {
@@ -20,7 +23,9 @@ public class VideoStoreUtils {
             }
         }
     }
-    private static String makeEmail(String firstName, String lastName) {
+
+    //to be used for testing
+    public static String makeEmail(String firstName, String lastName) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(firstName.substring(0,1))
                 .append(lastName)
@@ -33,7 +38,7 @@ public class VideoStoreUtils {
             Random randy = new Random();
             String email =
                     makeEmail(firstNames[randy.nextInt(firstNames.length)],
-                    lastNames[randy.nextInt(lastNames.length)]);
+                            lastNames[randy.nextInt(lastNames.length)]);
             Account account = store.getAccount(email);
             Video video = store.getRandomAvailableVideo();
             VideoRental rental = new VideoRental(video, account);
@@ -53,6 +58,21 @@ public class VideoStoreUtils {
         }
         return account;
     }
+
+    // to be used for testing returns the set of unique initials for firstNames
+    static public Set<Character> getFirstInitials() {
+        Set<Character> firstNameInitials = new HashSet<>();
+        for (String firstName : firstNames) {
+            firstNameInitials.add(firstName.charAt(0));
+        }
+        return firstNameInitials;
+    }
+
+    // to be used for testing returns the size of lastNames
+    static public int getNumberOfLastNames() {
+        return lastNames.length;
+    }
+
     public static void main(String argv[]) throws Exception {
         VideoStore store = new VideoStore();
         createAccounts(store);

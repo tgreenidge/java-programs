@@ -19,8 +19,12 @@ public class VideoRental {
         video.checkOut();
         this.video = video;
         this.account = account;
-        dueDate = LocalDate.now().plusDays(RENTAL_PERIOD_DAYS);
-        account.addRental(this);
+        dueDate = LocalDate.now().plusDays(RENTAL_PERIOD_DAYS );
+        try {
+            account.addRental(this);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
     public VideoRental(Video video, Account account, LocalDate dueDate)
             throws VideoException{
@@ -37,7 +41,7 @@ public class VideoRental {
         }
         VideoRental otherRental = (VideoRental) other;
         return video.equals(otherRental.video) &&
-                account == otherRental.getAccount() &&
+                account.equals(otherRental.getAccount()) &&
                 dueDate.equals(otherRental.dueDate);
     }
     @Override
@@ -70,6 +74,6 @@ public class VideoRental {
     }
     public static int getRentalPeriod() { return RENTAL_PERIOD_DAYS; }
     public boolean isOverDue() {
-        return dueDate.isAfter(LocalDate.now());
+        return LocalDate.now().isAfter(dueDate);
     }
 }

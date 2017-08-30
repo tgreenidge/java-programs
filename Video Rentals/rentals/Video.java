@@ -1,7 +1,6 @@
 package rentals;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 
 /**
  * Created by charliesawyer on 9/12/16.
@@ -33,7 +32,7 @@ public class Video implements Comparable {
             return false;
         }
         Video otherVideo = (Video) other;
-        return title.equals(otherVideo.getTitle()) &&
+        return title.equalsIgnoreCase(otherVideo.getTitle()) &&
                 year.equals(otherVideo.getYear());
     }
     @Override
@@ -67,7 +66,7 @@ public class Video implements Comparable {
         return availablity == AVAILABILITY.AVAILABLE;
     }
     public boolean isNotAvailable() {
-        return availablity == AVAILABILITY.UNAVAILABLE;
+        return availablity == AVAILABILITY.UNAVAILABLE ||  availablity == AVAILABILITY.OUT_OF_STOCK;
     }
     public void checkOut() {
         if (isAvailable()) {
@@ -77,7 +76,11 @@ public class Video implements Comparable {
         }
     }
     public void checkIn() {
-        availablity = AVAILABILITY.AVAILABLE;
+        if (availablity == AVAILABILITY.OUT_OF_STOCK || isAvailable() ) {
+            throw new RuntimeException("Video is " + availablity);
+        } else {
+            availablity = AVAILABILITY.AVAILABLE;
+        }
     }
     public void removeFromStock() {
         availablity = AVAILABILITY.OUT_OF_STOCK;

@@ -18,6 +18,7 @@ public class VideoStore {
     private Set<VideoRental> rentals = new HashSet<>();
     private List<Account> accounts = new ArrayList<>();
     private static String fileName;
+    private int ACCOUNTS_ID_TRACKER = 0;
 
     static {
         String fName = System.getProperty("FILENAME");
@@ -116,9 +117,22 @@ public class VideoStore {
                 .filter(VideoRental::isOverDue)
                 .collect(toSet());
     }
+
     public void createAccount(String firstName, String lastName, String email) {
-        accounts.add(new Account(firstName, lastName, email));
+        try {
+            if ( ! doesAccountExist(email)) {
+                Account newAccount = new Account(firstName, lastName, email, ++ACCOUNTS_ID_TRACKER);
+                accounts.add(newAccount);
+            } else {
+                throw new VideoException("Account already exists. Ask for new email");
+            }
+        } catch (VideoException e) {
+
+           // System.out.println(e.getMessage());
+        }
+
     }
+
     public Account getAccount(String email) {
         Account result = null;
         for (Account account : accounts) {
@@ -129,6 +143,12 @@ public class VideoStore {
         }
         return result;
     }
+
+    // returns number of Accounts
+    public int getNumberOfAccounts(){
+        return accounts.size();
+    }
+
     /*
     Same as getAccount above using Java8 streams
      */
@@ -136,13 +156,15 @@ public class VideoStore {
         Account result = null;
         Optional<Account> selectedAccounts =
                 accounts.stream()
-                .filter(a -> a.getEmail().equals(email))
-                .findAny();
+                        .filter(a -> a.getEmail().equals(email))
+                        .findAny();
         return selectedAccounts.isPresent() ?
                 selectedAccounts.get()
                 : null;
     }
+
     public void addRental(VideoRental videoRental) {
+
         rentals.add(videoRental);
     }
     public void settleAccount(Account account) {
@@ -165,4 +187,15 @@ public class VideoStore {
     public void clearRentals() {
         rentals.clear();
     }
+
+    /* This method  Checks for the existence of an account in the videoStore
+     * @param email - the email used for testing
+     * @return boolean - true if account exists
+    */
+    public boolean doesAccountExist (String email) {return getAccount(email) != null;}
+
+    /* This method keeps track of the ids of the account numbers in a video store
+    */
+    public int getAccountsIdTracker() {return ACCOUNTS_ID_TRACKER;}
+
 }

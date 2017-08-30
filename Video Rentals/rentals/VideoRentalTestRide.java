@@ -1,7 +1,6 @@
 package rentals;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.toSet;
@@ -10,6 +9,7 @@ import static java.util.stream.Collectors.toSet;
  * Created by charliesawyer on 10/20/16.
  */
 public class VideoRentalTestRide {
+
     public static void main(String argv[]) throws Exception {
         VideoStore videoStore = new VideoStore();
         VideoStoreUtils.createAccounts(videoStore);
@@ -39,6 +39,6 @@ public class VideoRentalTestRide {
         System.out.println("\n>>> After settling the Accounts: ");
         rentedVideos.stream().forEach(System.out::println);
         System.out.println("Number open rentals = " +
-        rentals.stream().filter(VideoRental::isOpen).collect(counting()));
+                rentals.stream().filter(VideoRental::isOpen).collect(counting()));
     }
 }
