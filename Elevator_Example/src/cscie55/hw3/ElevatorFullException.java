@@ -1,7 +1,7 @@
 package cscie55.hw3;
 
 /**
- * Created by Trinitee on 3/31/17.
+ * Created by Tisha Greenidge (Trinitee) on 3/31/17.
  */
 
 /**
